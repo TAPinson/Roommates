@@ -81,6 +81,18 @@ namespace Roommates
                         Console.Write("Press any key to continue");
                         Console.ReadKey();
                         break;
+                    case ("Add a chore"):
+                        Console.Write("Chore name: ");
+                        string choreName = Console.ReadLine();
+                        Chore choreToAdd = new Chore()
+                        {
+                            Name = choreName
+                        };
+                        choreRepo.Insert(choreToAdd);
+                        Console.WriteLine($"{choreToAdd.Name} has been added and assigned an Id of {choreToAdd.Id}");
+                        Console.Write("Press any key to continue");
+                        Console.ReadKey();
+                        break;
                     case ("Exit"):
                         runProgram = false;
                         break;
@@ -100,6 +112,7 @@ namespace Roommates
             "Add a room",
             "Show all chores",
             "Search for chore",
+            "Add a chore",
             "Exit"
         };
 

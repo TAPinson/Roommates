@@ -79,12 +79,26 @@ namespace Roommates.Repositories
                             Name = reader.GetString(reader.GetOrdinal("Name"))
                         };
                     }
-
                     reader.Close();
-
                     return chore;
+                }
+            }
+        }
 
+        public void Insert(Chore chore)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Chore (Name)
+                                        OUTPUT INSERTED.Id
+                                        VALUES (@name)";
+                    cmd.Parameters.AddWithValue("@name", chore.Name);
+                    int id = (int)cmd.ExecuteScalar();
 
+                    chore.Id = id;
                 }
             }
         }
