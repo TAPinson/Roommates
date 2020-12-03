@@ -15,6 +15,8 @@ namespace Roommates
         static void Main(string[] args)
         {
             RoomRepository roomRepo = new RoomRepository(CONNECTION_STRING);
+            ChoreRepository choreRepo = new ChoreRepository(CONNECTION_STRING);
+
             bool runProgram = true;
             while (runProgram)
             {
@@ -61,6 +63,15 @@ namespace Roommates
                         Console.Write("Press any key to continue");
                         Console.ReadKey();
                         break;
+                    case ("Show all chores"):
+                        List<Chore> chores = choreRepo.GetAll();
+                        foreach (Chore c in chores)
+                        {
+                            Console.WriteLine($"{c.Id} - {c.Name}");
+                        }
+                        Console.WriteLine("Press any key to continue");
+                        Console.ReadKey();
+                        break;
                     case ("Exit"):
                         runProgram = false;
                         break;
@@ -78,6 +89,7 @@ namespace Roommates
             "Show all rooms",
             "Search for room",
             "Add a room",
+            "Show all chores",
             "Exit"
         };
 
