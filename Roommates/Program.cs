@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Roommates.Repositories;
 using Roommates.Models;
 
@@ -64,9 +65,41 @@ namespace Roommates
                         Console.Write("Press any key to continue");
                         Console.ReadKey();
                         break;
+                    case ("Update a room"):
+                        List<Room> roomOptions = roomRepo.GetAll();
+                        foreach (Room r in roomOptions)
+                        {
+                            Console.WriteLine($"{r.Id} - {r.Name} Max Occupancy({r.MaxOccupancy})");
+                        }
+
+                        Console.Write("Which room would you like to update? ");
+                        int selectedRoomId = int.Parse(Console.ReadLine());
+                        Room selectedRoom = roomOptions.FirstOrDefault(r => r.Id == selectedRoomId);
+
+                        Console.Write("New Name: ");
+                        selectedRoom.Name = Console.ReadLine();
+
+                        Console.Write("New Max Occupancy: ");
+                        selectedRoom.MaxOccupancy = int.Parse(Console.ReadLine());
+
+                        roomRepo.Update(selectedRoom);
+
+                        Console.WriteLine($"Room has been successfully updated");
+                        Console.Write("Press any key to continue");
+                        Console.ReadKey();
+                        break;
                     case ("Show all chores"):
                         List<Chore> chores = choreRepo.GetAll();
                         foreach (Chore c in chores)
+                        {
+                            Console.WriteLine($"{c.Id} - {c.Name}");
+                        }
+                        Console.WriteLine("Press any key to continue");
+                        Console.ReadKey();
+                        break;
+                    case ("Show unassigned chores"):
+                        List<Chore> unassignedChores = choreRepo.GetUnassignedChores();
+                        foreach (Chore c in unassignedChores)
                         {
                             Console.WriteLine($"{c.Id} - {c.Name}");
                         }
@@ -98,7 +131,7 @@ namespace Roommates
                         Console.Write("Roommate Id: ");
                         int roommateId = int.Parse(Console.ReadLine());
                         Roommate roommate = roommateRepo.GetById(roommateId);
-                        Console.WriteLine($"{roommate.Firstname} - Rent Portion: {roommate.RentPortion} - {roommate.Room.Name}");
+                        Console.WriteLine($"{roommate.Firstname} - Rent Portion: {roommate.RentPortion}% - {roommate.Room.Name}");
                         Console.Write("Press any key to continue");
                         Console.ReadKey();
                         break;
@@ -118,8 +151,10 @@ namespace Roommates
         {
             "Show all rooms",
             "Search for room",
+            "Update a room",
             "Add a room",
             "Show all chores",
+            "Show unassigned chores",
             "Search for chore",
             "Add a chore",
             "Search for a roommate",

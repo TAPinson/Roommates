@@ -20,9 +20,7 @@ namespace Roommates.Repositories
                     cmd.CommandText = "SELECT Roommate.FirstName, Roommate.RentPortion, Room.Name AS OccupiedRoom, Room.MaxOccupancy AS RoomOccupancy FROM Roommate JOIN Room ON Roommate.RoomId = Room.Id WHERE Roommate.Id = @id";
                     cmd.Parameters.AddWithValue("@id", id);
                     SqlDataReader reader = cmd.ExecuteReader();
-
                     Roommate roommate = null;
-
                     if (reader.Read())
                     {
                         roommate = new Roommate()
@@ -30,7 +28,6 @@ namespace Roommates.Repositories
                             Id = id,
                             Firstname = reader.GetString(reader.GetOrdinal("FirstName")),
                             RentPortion = reader.GetInt32(reader.GetOrdinal("RentPortion")),
-                            // RoomString = reader.GetString(reader.GetOrdinal("RoomName"))
                             Room = new Room()
                             {
                                 Name = reader.GetString(reader.GetOrdinal("OccupiedRoom")),
@@ -41,9 +38,7 @@ namespace Roommates.Repositories
                     reader.Close();
                     return roommate;
                 }
-
             }
-            
         }
     }
 }

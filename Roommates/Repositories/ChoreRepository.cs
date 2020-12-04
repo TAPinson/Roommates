@@ -10,8 +10,6 @@ namespace Roommates.Repositories
     {
         public ChoreRepository(string connectionString) : base(connectionString) { }
 
-        // Get a list of all Chores in the database
-
         public List<Chore> GetAll()
         {
             //Prep to open up a connection. We need SqlConnection for this part so we are "using" it
@@ -103,5 +101,41 @@ namespace Roommates.Repositories
             }
         }
 
+        public List<Chore> GetUnassignedChores()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT Chore.Name, Chore.Id FROM Chore LEFT JOIN RoommateChore ON RoommateChore.ChoreID = Chore.Id WHERE RoommateChore.RoommateId IS NULL";
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Chore> chores = new List<Chore>();
+
+                    while (reader.Read())
+                    {
+                        int idColumnPosition = reader.GetOrdinal("Id");
+                        int idValue = reader.GetInt32(idColumnPosition);
+
+                        int nameColumnPosition = reader.GetOrdinal("Name");
+                        string nameValue = reader.GetString(nameColumnPosition);
+
+                        Chore chore = new Chore
+                        {
+                            Id = idValue,
+                            Name = nameValue
+                        };
+
+                        chores.Add(chore);
+                    }
+                    reader.Close();
+
+                    return chores;
+                }
+
+            }
+        }
     }
 }

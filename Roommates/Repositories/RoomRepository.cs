@@ -15,12 +15,6 @@ namespace Roommates.Repositories
         /// </summary>
         public RoomRepository(string connectionString) : base(connectionString) { }
 
-        // ...We'll add some methods shortly...
-
-
-        /// <summary>
-        ///  Returns a single room with the given id.
-        /// </summary>
         public Room GetById(int id)
         {
             using (SqlConnection conn = Connection)
@@ -53,13 +47,6 @@ namespace Roommates.Repositories
         }
 
 
-
-
-        /// <summary>
-        ///  Add a new room to the database
-        ///   NOTE: This method sends data to the database,
-        ///   it does not get anything from the database, so there is nothing to return.
-        /// </summary>
         public void Insert(Room room)
         {
             using (SqlConnection conn = Connection)
@@ -81,13 +68,6 @@ namespace Roommates.Repositories
             // when this method is finished we can look in the database and see the new room.
         }
 
-
-
-
-
-        /// <summary>
-        ///  Get a list of all Rooms in the database
-        /// </summary>
         public List<Room> GetAll()
         {
             //  We must "use" the database connection.
@@ -150,5 +130,39 @@ namespace Roommates.Repositories
             }
         }
 
+
+        public void Update(Room room)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Room
+                                    SET Name = @name,
+                                        MaxOccupancy = @maxOccupancy
+                                    WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@name", room.Name);
+                    cmd.Parameters.AddWithValue("@maxOccupancy", room.MaxOccupancy);
+                    cmd.Parameters.AddWithValue("@id", room.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM Room WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
