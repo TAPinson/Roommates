@@ -135,6 +135,25 @@ namespace Roommates
                         Console.Write("Press any key to continue");
                         Console.ReadKey();
                         break;
+                    case ("Assign chore to roommate"):
+                        List<Chore> proposedChores = choreRepo.GetAll();
+                        foreach (Chore c in proposedChores)
+                        {
+                            Console.WriteLine($"{c.Id} - {c.Name}");
+                        }
+                        Console.Write("Select the Id of the chore you want ");
+                        int chosenChore = int.Parse(Console.ReadLine());
+                        Console.WriteLine("-------------------------");
+                        List<Roommate> proposedRoommates = roommateRepo.GetAll();
+                        foreach (Roommate r in proposedRoommates)
+                        {
+                            Console.WriteLine($"{r.Id}) {r.Firstname} {r.Lastname}");
+                        }
+                        Console.Write("Select the Id of the roommate to assign ");
+                        int chosenRoommate = int.Parse(Console.ReadLine());
+                        choreRepo.AssignChore(chosenRoommate, chosenChore);
+
+                        break;
                     case ("Exit"):
                         runProgram = false;
                         break;
@@ -158,6 +177,7 @@ namespace Roommates
             "Search for chore",
             "Add a chore",
             "Search for a roommate",
+            "Assign chore to roommate",
             "Exit"
         };
 
