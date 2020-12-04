@@ -56,6 +56,9 @@ namespace Roommates
                     case ("Update a chore"):
                         updateChore(choreRepo);
                         break;
+                    case ("Delete a chore"):
+                        deleteChore(choreRepo);
+                        break;
                     case ("Search for a roommate"):
                         searchForRoommate(roommateRepo);
                         break;
@@ -66,6 +69,20 @@ namespace Roommates
                         runProgram = false;
                         break;
                 }
+            }
+
+            static void deleteChore(ChoreRepository choreRepo)
+            {
+                List<Chore> choresAtRisk = choreRepo.GetAll();
+                foreach (Chore c in choresAtRisk)
+                {
+                    Console.WriteLine($"{c.Id} {c.Name}");
+                }
+                Console.Write("Select a chore to delete: ");
+                int choreToDelete = int.Parse(Console.ReadLine());
+                choreRepo.Delete(choreToDelete);
+                Console.Write("Press any key to continue");
+                Console.ReadKey();
             }
 
             static void updateChore(ChoreRepository choreRepo)
@@ -248,6 +265,7 @@ namespace Roommates
             "Search for chore",
             "Add a chore",
             "Update a chore",
+            "Delete a chore",
             "Search for a roommate",
             "Assign chore to roommate",
             "Exit"
