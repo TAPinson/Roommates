@@ -161,5 +161,21 @@ namespace Roommates.Repositories
             Console.Write("Press any key to continue");
             Console.ReadKey();
         }
+
+        public void Update(int id, string name)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Chore SET Name = @name WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+
+            }
+        }
     }
 }

@@ -53,6 +53,9 @@ namespace Roommates
                     case ("Add a chore"):
                         addAChore(choreRepo);
                         break;
+                    case ("Update a chore"):
+                        updateChore(choreRepo);
+                        break;
                     case ("Search for a roommate"):
                         searchForRoommate(roommateRepo);
                         break;
@@ -65,6 +68,22 @@ namespace Roommates
                 }
             }
 
+            static void updateChore(ChoreRepository choreRepo)
+            {
+                List<Chore> choresToUpdate = choreRepo.GetAll();
+                foreach (Chore c in choresToUpdate)
+                {
+                    Console.WriteLine($"{c.Id} - {c.Name}");
+                }
+                Console.Write("Select a chore to update ");
+                int choreUpdateId = int.Parse(Console.ReadLine());
+                Console.Write("Enter the new name: ");
+                string choreUpdateName = Console.ReadLine();
+                choreRepo.Update(choreUpdateId, choreUpdateName);
+                Console.Write("Press any key to continue");
+                Console.ReadKey();
+            }
+
             static void deleteRoom(RoomRepository roomRepo)
             {
                 List<Room> roomsAtRisk = roomRepo.GetAll();
@@ -72,7 +91,6 @@ namespace Roommates
                 {
                     Console.WriteLine($"{r.Id} - {r.Name} Max Occupancy({r.MaxOccupancy})");
                 }
-
                 Console.Write("Select a room to delete: ");
                 int roomToDelete = int.Parse(Console.ReadLine());
                 roomRepo.Delete(roomToDelete);
@@ -229,6 +247,7 @@ namespace Roommates
             "Show unassigned chores",
             "Search for chore",
             "Add a chore",
+            "Update a chore",
             "Search for a roommate",
             "Assign chore to roommate",
             "Exit"
